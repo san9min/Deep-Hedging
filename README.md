@@ -1,5 +1,7 @@
 # Deep-Hedging
-*In 2021 FALL, Financial-Engineering*
+*In 2021 fall, Financial-Engineering*
+
+Sangmin Lee (이상민)
 
 ## Introduction
  According to Black-Scholes, we can hedge a call option whose pay-off diagram is max(S-K,0) and a put option whose max(K-S,0). We can also hedge a financial derivative which is made of call and put options with their help. But Black-Sholes cannot hedge all financial derivatives. Because they use the way called delta hedging,
