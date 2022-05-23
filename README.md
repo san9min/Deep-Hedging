@@ -1,9 +1,9 @@
 # Deep-Hedging
-*In 2021 fall, Financial-Engineering*
+*2021 fall, Financial-Engineering*
 
 Sangmin Lee (이상민)
 
-## Introduction
+# Introduction
  According to Black-Scholes, we can hedge a call option whose pay-off diagram is max(S-K,0) and a put option whose max(K-S,0). We can also hedge a financial derivative which is made of call and put options with their help. But Black-Sholes cannot hedge all financial derivatives. Because they use the way called delta hedging,
 They can only predict the financial derivative based on call and put option. We want to solve this problem by using Neural Network and we call this solution Deep Hedging. 
  The idea is Neural Network induces the proper delta. But, can Neural Network find the delta? To answer this, I’ll show followings:
@@ -114,15 +114,33 @@ $$
 
 ---
 
-## Delta hedging
+# Delta hedging
  Suppose you sell an option and you want to hedge this. Then, you can get help from Black-Sholes. For example, let you sell a call option. All you have to do is just to calculate delta by using **(8)**. Or a put option, **(9)**. you hedge the option if and only If you have the same number of stock as delta. Because we suppose there is no arbitrage, the sum of the cost that you spend while hedging the option and pay-off of the option must be same as the option’s premium. Then, how can we hedge the option strategy that can’t get help from Black-Sholes? This is the reason why we suggest the Deep Hedging.
  
 ---
 
-## Neural network for delta hedging; *Deep Hedging* 
+# Neural network for delta hedging; *Deep Hedging* 
 We want to make a neural network regress to the hedging delta.
 Let’s start with option hedging. For simplicity, let you sell a call option and hedge this. And suppose that interest rate, volatility is constant and equal to 0, 0.2 respectively.
-Let current stock price S0 be 1.00, delivery price K 1.00, remaining periods before its expiration date 30/365. Then according to **(10)**, we can make scenarios that represent the stock price through time and let this S. Also, we can calculate the option price by **(10)**, or directly **(8)** and **(9)**.
+Let current stock price S0 be 1.00, delivery price K 1.00, remaining periods before its expiration date 30/365. Then according to **(10)**, we can make scenarios that represent the stock price through time and let this S. Also, we can calculate the option price by **(7)**, or directly **(8)** and **(9)**.
 Before using neural network, check the Black-Sholes’ delta is valid. If we hedge the option with Black-Sholes, the sum of the hedging cost, pay-off and premium must be zero. 
 The results are:
 
+<figure>
+ <img src="https://user-images.githubusercontent.com/92682815/169724389-839d6969-02dd-4da2-bcaa-db4976092e27.png" align= 'left' alt="Trulli" style="width:48%">  
+ <img src="https://user-images.githubusercontent.com/92682815/169725017-2f282544-3c92-4b50-9d11-b236bb44dbb7.png" align= 'right' alt="Trulli" style="width:48%">  
+ <figcaption align = "left"><b>Fig.1 - Deep Hedging for a call; Histogram(left) and Scatter plot(right)</b></figcaption> 
+</figure>
+
+
+Figure 1(left) is a histogram whose x-axis is the values our neural network model put out and they represent the sum of hedging cost, pay-off and premium. if the neural network model is perfect and ideal, the values are all zero and the grap shows the Dirac delta function at zero. The result in Figure 1 is similar to a normal distribution(or a bell curve) and its mean is zero. Figure 1(right) is a scatter plot whose x-axis is delivery price and y-axis is the values our neural network model put out. if the neural network model is perfect and ideal, the graph is constant, that is, horizontal line equal to zero. From these results, we may think the neural network can find the hedging delta.
+ To be more complicated, we try to hedge a financial derivative(option strategy) composed of call and put. We consider an iron condor. The iron condor is an options strategy consisting of two puts (one long and one short) and two calls (one long and one short), and four strike prices, all with the same expiration date. The iron condor earns the maximum profit when the underlying asset closes between the middle strike prices at expiration. In other words, the goal is to profit from low volatility in the underlying asset. The iron condor’s pay-off is, for example,
+ 
+ <figure>
+ <img src="https://user-images.githubusercontent.com/92682815/169727573-c405c045-26b1-46a3-9605-4d5d260801b2.png" align= 'left' alt="Trulli" style="width:50%">  
+ <figcaption align = "center"><b>Fig.2 Iron Condor payoff’s shape </b></figcaption> 
+</figure>
+
+Important is the shape, not the specific values. In this case, we take the delivery prices as 90, 95, 105, 110. To hedge Iron condor, we need to make above payoff. For convenience, let delivery prices be 0.9, 0.95, 1.05, 1.10. By using four options, we make this. We try three cases whose components are different. One is to use only call, another is to use only put and the other is two calls and two puts. 
+
+The first is to use only call. To make above payoff, we must take two long positions to call and two short. Likewise, we put in the sum of Stock price sets, hedging cost initialized with zero and premium to neural network. our targets are zero. we use the same delta model to each three cases and the results are
