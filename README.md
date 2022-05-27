@@ -3,6 +3,9 @@
 
 Sangmin Lee (이상민)
 
+# Review
+ After this project, i think the Neural Network(or AI) is a good approximator to link the theory(or mathematical ananlysis) to real application(or real observation).
+For example, with Newton's inertial frame of reference we can analyze the nature mathematically and we can get what major effect is.
 # Introduction
  According to Black-Scholes, we can hedge a call option whose pay-off diagram is max(S-K,0) and a put option whose max(K-S,0). We can also hedge a financial derivative which is made of call and put options with their help. But Black-Sholes cannot hedge all financial derivatives. Because they use the way called delta hedging,
 They can only predict the financial derivative based on call and put option. We want to solve this problem by using Neural Network and we call this solution Deep Hedging. 
