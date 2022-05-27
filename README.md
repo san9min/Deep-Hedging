@@ -134,8 +134,8 @@ Before using neural network, check the Black-Sholes’ delta is valid. If we hed
 The results are:
 
 <figure>
- <img src="https://user-images.githubusercontent.com/92682815/170630783-21dd4d29-ac90-4b5e-8e69-6ee01d5e78fb.png" align= 'center' alt="Trulli" style="width:48%">  
- <img src="https://user-images.githubusercontent.com/92682815/170630793-418f2b3e-e3fe-46fc-bfd3-58fba407b0fe.png" align= 'center' alt="Trulli" style="width:48%">  
+ <img src="https://user-images.githubusercontent.com/92682815/170630783-21dd4d29-ac90-4b5e-8e69-6ee01d5e78fb.png" align= 'center'>  
+ <img src="https://user-images.githubusercontent.com/92682815/170630793-418f2b3e-e3fe-46fc-bfd3-58fba407b0fe.png" align= 'center'>  
  <figcaption align = "left"><b>Fig.1 - Delta Hedging; Histogram(left) and Scatter plot(right)</b></figcaption> 
 </figure>
 
@@ -188,11 +188,16 @@ where the red lines are ideal cases of each. Among the results, using puts and c
 
 From the above, you may think neural network can find the delta, hedging options or financial derivatives. Moreover, we suggest that neural network can find the hedging delta for any financial derivatives whose pay-off diagram is any functions so that Black-Sholes cannot do anything for those, although the better neural network must be needed. We call this Deep Hedging and suggest that the RNN is one of the solutions for better neural network. Before the next step, we should modify our model from the above, specifically inputs and outputs. And we introduce you the RNN.
  Note that we want to get the delta for hedging. if we put the stock price sets and pay-off into the neural network model, then we expect that neural network put out the premium, calculating the proper delta for hedging. Check this. For simplicity, use a call option. Inputs are the stock price sets and pay-off of call and target is premium of call.
- ![image](https://user-images.githubusercontent.com/92682815/170633421-fb151bfa-0585-4264-b5c7-a083b93ddc17.png)
+![image](https://user-images.githubusercontent.com/92682815/170633421-fb151bfa-0585-4264-b5c7-a083b93ddc17.png)
 ![image](https://user-images.githubusercontent.com/92682815/170633428-44003d94-6fd2-4a5a-b9f5-c3f7adf6aec7.png)
 
  
  
  We already know the premium of call from Black-Sholes, which is about 0.02. So we conclude our model works the same as we expected. So, we can hedge any option strategies as neural network calculate the delta for given premium. Then, the remaining problem is how we model a better neural network. 
  
- 
+I try using GRU for deep hedging. For simplicity, we predict call’s delta at first. We put  the stock price sets and pay-off in the GRU model. We expect that our model put out the premium of the call. So target(label) is the premium of the call and we give this with Black-Sholes.
+
+![66](https://user-images.githubusercontent.com/92682815/170633736-12378d98-f617-4f68-aaad-528694a68fce.png)
+![55](https://user-images.githubusercontent.com/92682815/170633750-8bdc770d-401a-4fd5-8b77-7481b92a4685.png)
+
+We may think the RNNs model find the delta. But comparing these results to above results without RNNs, there is no dramatic improvement. But, I suggest that if you get more complex and well-made RNN model, you can hedge any kind of option strategies.
