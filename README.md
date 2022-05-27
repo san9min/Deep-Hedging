@@ -138,10 +138,11 @@ Let current stock price S0 be 1.00, delivery price K 1.00, remaining periods bef
 Before using neural network, check the Black-Sholes’ delta is valid. If we hedge the option with Black-Sholes, the sum of the hedging cost, pay-off and premium must be zero. 
 The results are:
 
-<figure>
- <img src="https://user-images.githubusercontent.com/92682815/170643039-b3269de9-8041-4987-854a-32548bca8e1c.png"> <img src="https://user-images.githubusercontent.com/92682815/170643073-8536633e-9546-4d32-abd5-431a80355af3.png">  
- <figcaption align = "center"><b>Fig.1 - Delta Hedging; Histogram(left) and Scatter plot(right)</b></figcaption> 
-</figure>
+![delta hedg hist](https://user-images.githubusercontent.com/92682815/170643039-b3269de9-8041-4987-854a-32548bca8e1c.png)
+![delta hedg scat](https://user-images.githubusercontent.com/92682815/170643073-8536633e-9546-4d32-abd5-431a80355af3.png)
+
+**Fig.1 - Delta Hedging; Histogram(left) and Scatter plot(right)**
+
 
   
  From the results in Figure 1(left) and Figure 1(right), we may think the Black-Sholes formula is valid. Next is to find delta with neural network.  
@@ -149,43 +150,43 @@ The results are:
  Let S be stock price scenarios and y be option price with Black-Sholes. Using these, we try hedging the option. if the sum of cost hedging the option, pay-off and premium driven by Black-Sholes is zero, we consider the delta neural network got as one Black-Sholes got. Then, this tell us we can hedge the option with that delta neural network get.
 Train the neural network. Inputs are Stock price scenarios, hedging cost initialized with zero and premium. And our targets(or labels) are zero. ; they must be zero since we want to hedge the option in no arbitrage world.
 
-<figure>
- <img src="https://user-images.githubusercontent.com/92682815/170643413-a1533b65-e910-49c9-bf47-0b35554212ca.png">  
- ,<img src="https://user-images.githubusercontent.com/92682815/170643360-011264a0-5dae-4dd8-ac57-2d0a1fc8e304.png">  
- <figcaption align = "left"><b>Fig.2 - Deep Hedging for a call; Histogram(left) and Scatter plot(right)</b></figcaption> 
-</figure>
+![deep for call](https://user-images.githubusercontent.com/92682815/170643413-a1533b65-e910-49c9-bf47-0b35554212ca.png)
+![scat deep for call](https://user-images.githubusercontent.com/92682815/170643360-011264a0-5dae-4dd8-ac57-2d0a1fc8e304.png)  
+
+**Fig.2 - Deep Hedging for a call; Histogram(left) and Scatter plot(right)**
+
 
 Figure 2(left) is a histogram whose x-axis is the values our neural network model put out and they represent the sum of hedging cost, pay-off and premium. if the neural network model is perfect and ideal, the values are all zero and the grap shows the Dirac delta function at zero. The result in Figure 1 is similar to a normal distribution(or a bell curve) and its mean is zero. Figure 2(right) is a scatter plot whose x-axis is delivery price and y-axis is the values our neural network model put out. if the neural network model is perfect and ideal, the graph is constant, that is, horizontal line equal to zero. From these results, we may think the neural network can find the hedging delta.
  To be more complicated, we try to hedge a financial derivative(option strategy) composed of call and put. We consider an iron condor. The iron condor is an options strategy consisting of two puts (one long and one short) and two calls (one long and one short), and four strike prices, all with the same expiration date. The iron condor earns the maximum profit when the underlying asset closes between the middle strike prices at expiration. In other words, the goal is to profit from low volatility in the underlying asset. The iron condor’s pay-off is, for example,
 
- <figure>
- <img src="https://user-images.githubusercontent.com/92682815/170643497-5fb5387c-b501-41e8-bfa8-d572867e33b6.png">  
- <figcaption align = "center"><b>Fig.3 Iron Condor payoff’s shape </b></figcaption> 
-</figure>
+![condor](https://user-images.githubusercontent.com/92682815/170643497-5fb5387c-b501-41e8-bfa8-d572867e33b6.png)
+
+**Fig.3 Iron Condor payoff’s shape**
 
 Important is the shape, not the specific values. In this case, we take the delivery prices as 90, 95, 105, 110. To hedge Iron condor, we need to make above payoff. For convenience, let delivery prices be 0.9, 0.95, 1.05, 1.10. By using four options, we make this. We try three cases whose components are different. One is to use only call, another is to use only put and the other is two calls and two puts. 
 
 The first is to use only call. To make above payoff, we must take two long positions to call and two short. Likewise, we put in the sum of Stock price sets, hedging cost initialized with zero and premium to neural network. our targets are zero. we use the same delta model to each three cases and the results are
- <figure>
-  <img src="https://user-images.githubusercontent.com/92682815/170643784-3c33fadb-04c1-4a83-831f-9cbf711ec604.png"> 
-  <img src="https://user-images.githubusercontent.com/92682815/170643850-0f28dedc-66d0-46ba-b4e5-b711ad8d2e1f.png"> 
- <figcaption align = "center"><b>Fig.4 Deep Hedging for a Iron Condor with 4 calls </b></figcaption> 
-</figure>
+
+![4ca](https://user-images.githubusercontent.com/92682815/170643784-3c33fadb-04c1-4a83-831f-9cbf711ec604.png)
+![4casca](https://user-images.githubusercontent.com/92682815/170643850-0f28dedc-66d0-46ba-b4e5-b711ad8d2e1f.png)
+  
+**Fig.4 Deep Hedging for a Iron Condor with 4 calls**
+
 
  The second is to use only put.
-<figure>
-<img src="https://user-images.githubusercontent.com/92682815/170643926-e0064d7c-9238-4ce4-a043-74a34dd1479b.png"> 
-<img src="https://user-images.githubusercontent.com/92682815/170644020-3aadaf47-d091-42d8-a9df-795667d4e45d.png"> 
-<figcaption align = "center"><b>Fig.5 Deep Hedging for a Iron Condor with 4 puts </b></figcaption> 
-</figure>
+
+![4p](https://user-images.githubusercontent.com/92682815/170643926-e0064d7c-9238-4ce4-a043-74a34dd1479b.png)
+![4psca](https://user-images.githubusercontent.com/92682815/170644020-3aadaf47-d091-42d8-a9df-795667d4e45d.png) 
+
+**Fig.5 Deep Hedging for a Iron Condor with 4 puts**
 
 The last is to use two puts and two calls.
 
-<figure>
-<img src="https://user-images.githubusercontent.com/92682815/170644070-8099250c-eb40-4890-a3a1-e3f371ca9467.png"> 
-<img src="https://user-images.githubusercontent.com/92682815/170644110-1d1cbea8-8df6-4814-9de4-77cc38ad28bd.png"> 
-<figcaption align = "center"><b>Fig.6 Deep Hedging for a Iron Condor with 2 puts and 2 calls </b></figcaption> 
-</figure>
+
+![pc](https://user-images.githubusercontent.com/92682815/170644070-8099250c-eb40-4890-a3a1-e3f371ca9467.png)
+![pc sc](https://user-images.githubusercontent.com/92682815/170644110-1d1cbea8-8df6-4814-9de4-77cc38ad28bd.png)
+
+**Fig.6 Deep Hedging for a Iron Condor with 2 puts and 2 calls**
 
 where the red lines are ideal cases of each. Among the results, using puts and calls is best, showing the lowest hedging error. (Compare the result in Figure 6 to in Figure 4,5)
 
