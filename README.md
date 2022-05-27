@@ -134,20 +134,65 @@ Before using neural network, check the Black-Sholes’ delta is valid. If we hed
 The results are:
 
 <figure>
- <img src="https://user-images.githubusercontent.com/92682815/169724389-839d6969-02dd-4da2-bcaa-db4976092e27.png" align= 'left' alt="Trulli" style="width:48%">  
- <img src="https://user-images.githubusercontent.com/92682815/169725017-2f282544-3c92-4b50-9d11-b236bb44dbb7.png" align= 'right' alt="Trulli" style="width:48%">  
- <figcaption align = "left"><b>Fig.1 - Deep Hedging for a call; Histogram(left) and Scatter plot(right)</b></figcaption> 
+ <img src="https://user-images.githubusercontent.com/92682815/170630783-21dd4d29-ac90-4b5e-8e69-6ee01d5e78fb.png" align= 'center' alt="Trulli" style="width:48%">  
+ <img src="https://user-images.githubusercontent.com/92682815/170630793-418f2b3e-e3fe-46fc-bfd3-58fba407b0fe.png" align= 'center' alt="Trulli" style="width:48%">  
+ <figcaption align = "left"><b>Fig.1 - Delta Hedging; Histogram(left) and Scatter plot(right)</b></figcaption> 
 </figure>
 
 
-Figure 1(left) is a histogram whose x-axis is the values our neural network model put out and they represent the sum of hedging cost, pay-off and premium. if the neural network model is perfect and ideal, the values are all zero and the grap shows the Dirac delta function at zero. The result in Figure 1 is similar to a normal distribution(or a bell curve) and its mean is zero. Figure 1(right) is a scatter plot whose x-axis is delivery price and y-axis is the values our neural network model put out. if the neural network model is perfect and ideal, the graph is constant, that is, horizontal line equal to zero. From these results, we may think the neural network can find the hedging delta.
+ From the results in Figure 1(left) and Figure 1(right), we may think the Black-Sholes formula is valid. Next is to find delta with neural network.
+ 
+ Let S be stock price scenarios and y be option price with Black-Sholes. Using these, we try hedging the option. if the sum of cost hedging the option, pay-off and premium driven by Black-Sholes is zero, we consider the delta neural network got as one Black-Sholes got. Then, this tell us we can hedge the option with that delta neural network get.
+Train the neural network. Inputs are Stock price scenarios, hedging cost initialized with zero and premium. And our targets(or labels) are zero. ; they must be zero since we want to hedge the option in no arbitrage world.
+
+<figure>
+ <img src="https://user-images.githubusercontent.com/92682815/169724389-839d6969-02dd-4da2-bcaa-db4976092e27.png" align= 'left' alt="Trulli" style="width:48%">  
+ <img src="https://user-images.githubusercontent.com/92682815/169725017-2f282544-3c92-4b50-9d11-b236bb44dbb7.png" align= 'right' alt="Trulli" style="width:48%">  
+ <figcaption align = "left"><b>Fig.2 - Deep Hedging for a call; Histogram(left) and Scatter plot(right)</b></figcaption> 
+</figure>
+
+
+Figure 2(left) is a histogram whose x-axis is the values our neural network model put out and they represent the sum of hedging cost, pay-off and premium. if the neural network model is perfect and ideal, the values are all zero and the grap shows the Dirac delta function at zero. The result in Figure 1 is similar to a normal distribution(or a bell curve) and its mean is zero. Figure 2(right) is a scatter plot whose x-axis is delivery price and y-axis is the values our neural network model put out. if the neural network model is perfect and ideal, the graph is constant, that is, horizontal line equal to zero. From these results, we may think the neural network can find the hedging delta.
  To be more complicated, we try to hedge a financial derivative(option strategy) composed of call and put. We consider an iron condor. The iron condor is an options strategy consisting of two puts (one long and one short) and two calls (one long and one short), and four strike prices, all with the same expiration date. The iron condor earns the maximum profit when the underlying asset closes between the middle strike prices at expiration. In other words, the goal is to profit from low volatility in the underlying asset. The iron condor’s pay-off is, for example,
  
  <figure>
- <img src="https://user-images.githubusercontent.com/92682815/169727573-c405c045-26b1-46a3-9605-4d5d260801b2.png" align= 'left' alt="Trulli" style="width:50%">  
- <figcaption align = "center"><b>Fig.2 Iron Condor payoff’s shape </b></figcaption> 
+ <img src="https://user-images.githubusercontent.com/92682815/169727573-c405c045-26b1-46a3-9605-4d5d260801b2.png" align= 'center' alt="Trulli" style="width:50%">  
+ <figcaption align = "center"><b>Fig.3 Iron Condor payoff’s shape </b></figcaption> 
 </figure>
 
 Important is the shape, not the specific values. In this case, we take the delivery prices as 90, 95, 105, 110. To hedge Iron condor, we need to make above payoff. For convenience, let delivery prices be 0.9, 0.95, 1.05, 1.10. By using four options, we make this. We try three cases whose components are different. One is to use only call, another is to use only put and the other is two calls and two puts. 
 
 The first is to use only call. To make above payoff, we must take two long positions to call and two short. Likewise, we put in the sum of Stock price sets, hedging cost initialized with zero and premium to neural network. our targets are zero. we use the same delta model to each three cases and the results are
+ <figure>
+ <img src="https://user-images.githubusercontent.com/92682815/170631761-d53c13c4-604c-4c34-ab9a-0e75eb666c91.png" align= 'center' alt="Trulli" style="width:50%"> 
+  <img src="https://user-images.githubusercontent.com/92682815/170631766-20afd5b9-dcba-49a0-b60d-850555a0e4e1.png" align= 'center' alt="Trulli" style="width:50%"> 
+ <figcaption align = "center"><b>Fig.4 Deep Hedging for a Iron Condor with 4 calls </b></figcaption> 
+</figure>
+
+ The second is to use only put.
+<figure>
+<img src="https://user-images.githubusercontent.com/92682815/170632048-0967e13a-7711-497f-8e35-e0b37a9657e0.png" align= 'center' alt="Trulli" style="width:50%"> 
+<img src="https://user-images.githubusercontent.com/92682815/170632057-b1398817-d780-4fa4-96ad-72692b4866cc.png" align= 'center' alt="Trulli" style="width:50%"> 
+<figcaption align = "center"><b>Fig.5 Deep Hedging for a Iron Condor with 4 puts </b></figcaption> 
+</figure>
+
+The last is to use two puts and two calls.
+
+<figure>
+<img src="https://user-images.githubusercontent.com/92682815/170632326-45c09ad3-53e9-4201-96bc-828fdd4e448c.png" align= 'center' alt="Trulli" style="width:50%"> 
+<img src="https://user-images.githubusercontent.com/92682815/170632346-64de8504-1127-4e0c-ab92-5a30f2c49831.png" align= 'center' alt="Trulli" style="width:50%"> 
+<figcaption align = "center"><b>Fig.6 Deep Hedging for a Iron Condor with 2 puts and 2 calls </b></figcaption> 
+</figure>
+
+where the red lines are ideal cases of each. Among the results, using puts and calls is best, showing the lowest hedging error. (Compare the result in Figure 6 to in Figure 4,5)
+
+From the above, you may think neural network can find the delta, hedging options or financial derivatives. Moreover, we suggest that neural network can find the hedging delta for any financial derivatives whose pay-off diagram is any functions so that Black-Sholes cannot do anything for those, although the better neural network must be needed. We call this Deep Hedging and suggest that the RNN is one of the solutions for better neural network. Before the next step, we should modify our model from the above, specifically inputs and outputs. And we introduce you the RNN.
+ Note that we want to get the delta for hedging. if we put the stock price sets and pay-off into the neural network model, then we expect that neural network put out the premium, calculating the proper delta for hedging. Check this. For simplicity, use a call option. Inputs are the stock price sets and pay-off of call and target is premium of call.
+ ![image](https://user-images.githubusercontent.com/92682815/170633421-fb151bfa-0585-4264-b5c7-a083b93ddc17.png)
+![image](https://user-images.githubusercontent.com/92682815/170633428-44003d94-6fd2-4a5a-b9f5-c3f7adf6aec7.png)
+
+ 
+ 
+ We already know the premium of call from Black-Sholes, which is about 0.02. So we conclude our model works the same as we expected. So, we can hedge any option strategies as neural network calculate the delta for given premium. Then, the remaining problem is how we model a better neural network. 
+ 
+ 
